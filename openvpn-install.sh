@@ -57,9 +57,7 @@ fi
 
 newclient () {
 	# Where to write the custom client.ovpn?
-	if [ -e /home/$1 ]; then  # if $1 is a user name
-		homeDir="/home/$1"
-	elif [ ${SUDO_USER} ]; then   # if not, use SUDO_USER
+	if [ ${SUDO_USER} ]; then   # if not, use SUDO_USER
 		homeDir="/home/${SUDO_USER}"
 	else  # if not SUDO_USER, use /root
 		homeDir="/root"
@@ -191,6 +189,13 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 				fi
 				rm -rf /etc/openvpn
 				rm -rf /usr/share/doc/openvpn*
+				# Where are the client files?
+				if [ ${SUDO_USER} ]; then   # if not, use SUDO_USER
+					homeDir="/home/${SUDO_USER}"
+				else  # if not SUDO_USER, use /root
+					homeDir="/root"
+				fi
+				rm $homeDir*/.ovpn
 				echo ""
 				echo "OpenVPN removed!"
 			else
@@ -236,6 +241,21 @@ else
 	while [[ $DNS != "1" && $DNS != "2" && $DNS != "3" && $DNS != "4" && $DNS != "5" && $DNS != "6" ]]; do
 		read -p "DNS [1-6]: " -e -i 1 DNS
 	done
+	echo ""
+	echo "Choose which compression algorithm you want to use:"
+	echo "   1) LZ4 (faster)"
+	echo "   2) LZ0 (use for OpenVPN 2.3 compatibility"
+	while [[ $COMPRESSION != "1" && $COMPRESSION != "2" ]]; do
+		read -p "Compression algorithm [1-2]: " -e -i 1 COMPRESSION
+	done
+	case $COMPRESSION in
+		1)
+		COMPRESSION="lz4"
+		;;
+		2)
+		COMPRESSION="lzo"
+		;;
+	esac
 	echo ""
 	echo "See https://github.com/Angristan/OpenVPN-install#encryption to learn more about "
 	echo "the encryption in OpenVPN and the choices proposed in this script."
@@ -489,17 +509,14 @@ else
 		if [[ "$VERSION_ID" = 'VERSION_ID="8"' ]]; then
 			echo "deb http://build.openvpn.net/debian/openvpn/stable jessie main" > /etc/apt/sources.list.d/openvpn.list
 			wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
-			apt update
 		# Ubuntu 14.04
 		elif [[ "$VERSION_ID" = 'VERSION_ID="14.04"' ]]; then
 			echo "deb http://build.openvpn.net/debian/openvpn/stable trusty main" > /etc/apt/sources.list.d/openvpn.list
 			wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
-			apt-get update
 		# Ubuntu 16.04
 		elif [[ "$VERSION_ID" = 'VERSION_ID="16.04"' ]]; then
 			echo "deb http://build.openvpn.net/debian/openvpn/stable xenial main" > /etc/apt/sources.list.d/openvpn.list
 			wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg | apt-key add -
-			apt-get update
 		fi
 		# Ubuntu >= 17.04 and Debian > 9 have OpenVPN 2.4 without the need of a third party repository.
 		# The we install OpenVPN
@@ -672,6 +689,7 @@ ncp-disable
 tls-server
 tls-version-min 1.2
 tls-cipher $CC_ENC
+compress $COMPRESSION
 status openvpn.log
 verb 3" >> /etc/openvpn/server.conf
 
