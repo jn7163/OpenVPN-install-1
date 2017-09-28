@@ -20,6 +20,8 @@ First, get the script and make it executable :
 wget https://raw.githubusercontent.com/Angristan/OpenVPN-install/master/openvpn-install.sh
 chmod +x openvpn-install.sh
 ```
+Please use openvpn-2.4 brance for latest updates.
+
 Then run it :
 
 `./openvpn-install.sh`
