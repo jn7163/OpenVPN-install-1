@@ -476,7 +476,7 @@ else
 	echo "   3) SHA-384 (recommended)"
 	echo "   4) SHA-512"
 		while [[ $HMAC_AUTH != "1" && $HMAC_AUTH != "2" && $HMAC_AUTH != "3" && $HMAC_AUTH != "4" ]]; do
-			read -p "HMAC authentication algorithm [1-3]: " -e -i 2 HMAC_AUTH
+			read -p "HMAC authentication algorithm [1-4]: " -e -i 2 HMAC_AUTH
 	done
 	case $HMAC_AUTH in
 		1)
