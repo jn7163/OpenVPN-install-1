@@ -21,6 +21,20 @@ When OpenVPN is installed, you can run the script again, and you will get the ch
 - Remove a client
 - Uninstall OpenVPN
 
+The script is made to work on these OS and architectures :
+
+Debian 7 (i386, amd64)
+Debian 8 (i386, amd64)
+Debian 9 (i386, amd64, armhf, arm64)
+Ubuntu 12.04 LTS (i386, amd64)
+Ubuntu 14.04 LTS (i386, amd64)
+Ubuntu 16.04 LTS (i386, amd64)
+Ubuntu 16.10 (i386, amd64, armhf, arm64)
+Ubuntu 17.04 (i386, amd64, armhf, arm64)
+CentOS 6 (i386, amd64)
+CentOS 7 (i386, amd64, arm64)
+Arch Linux (i686, amd64)
+
 Credits to:
 
 @Angristan
