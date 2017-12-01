@@ -447,8 +447,9 @@ else
 	elif [[ "$CERT_TYPE" = '2' ]]; then
 		echo "   1) ECDHE-RSA-AES-256-GCM-SHA384 (recommended)"
 		echo "   2) ECDHE-RSA-AES-128-GCM-SHA256"
-		while [[ $CC_ENC != "1" && $CC_ENC != "2" ]]; do
-			read -p "Control channel cipher [1-2]: " -e -i 1 CC_ENC
+		echo "   3) TLS-DHE-RSA-WITH-AES-128-GCM-SHA256"
+		while [[ $CC_ENC != "1" && $CC_ENC != "2" && $CC_ENC != "3" ]]; do
+			read -p "Control channel cipher [1-3]: " -e -i 1 CC_ENC
 		done
 		case $CC_ENC in
 			1)
@@ -456,6 +457,9 @@ else
 			;;
 			2)
 				CC_ENC="TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256"
+			;;
+			3)
+				CC_ENC="TLS-DHE-RSA-WITH-AES-128-GCM-SHA256"
 			;;
 		esac
 	fi
